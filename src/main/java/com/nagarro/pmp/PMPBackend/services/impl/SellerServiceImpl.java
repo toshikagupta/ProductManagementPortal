@@ -44,4 +44,24 @@ public class SellerServiceImpl implements SellerService {
 	public List<SellerDTO> getAllSellers() {
 		return sellerRegistrationDAO.getAllSellers();
 	}
+
+
+	@Override
+	public List<SellerDTO> approveSellers(int[] sellerName) {
+		return sellerRegistrationDAO.approveSellers(sellerName);
+		
+	}
+
+
+	@Override
+	public void rejectSellers(int[] sellerId) {
+		sellerRegistrationDAO.rejectSellers(sellerId);
+		
+	}
+
+
+	@Override
+	public SellerDTO displaysSellerById(int sellerId) {
+		return sellerRegistrationDAO.displaysSellerById(sellerId);
+	}
 }

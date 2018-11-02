@@ -18,4 +18,11 @@ public interface SellerRegistrationDAO {
 	
 	List<SellerDTO> getAllSellers();
 
+	List<SellerDTO> approveSellers(int[] sellerName);
+
+	void rejectSellers(int[] sellerIdList);
+
+	SellerDTO displaysSellerById(int sellerId);
+
+
 }

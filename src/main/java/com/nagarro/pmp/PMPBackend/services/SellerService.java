@@ -18,4 +18,10 @@ public interface SellerService {
 
 	List<SellerDTO> getAllSellers();
 
+	List<SellerDTO> approveSellers(int[] sellerName);
+
+	void rejectSellers(int[] sellerId);
+
+	SellerDTO displaysSellerById(int sellerId);
+
 }

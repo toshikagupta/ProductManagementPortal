@@ -1,5 +1,6 @@
 package com.nagarro.pmp.PMPBackend.dao.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,18 +13,20 @@ import org.springframework.stereotype.Repository;
 
 import com.nagarro.pmp.PMPBackend.dao.ProductDAO;
 import com.nagarro.pmp.PMPBackend.dto.ProductDTO;
+import com.nagarro.pmp.PMPBackend.dto.ProductDescDTO;
 import com.nagarro.pmp.PMPBackend.hibernate.util.HibernateUtil;
 import com.nagarro.pmp.PMPBackend.model.Categories;
 import com.nagarro.pmp.PMPBackend.model.PdfManual;
 import com.nagarro.pmp.PMPBackend.model.Product;
 import com.nagarro.pmp.PMPBackend.model.SecondaryImages;
+import com.nagarro.pmp.PMPBackend.model.Seller;
 
 @Repository
 public class ProductDAOImpl implements ProductDAO {
-	Session session = HibernateUtil.openSession();
+
 	@Override
 	public void addProducts(ProductDTO productDTO) {
-	
+		Session session = HibernateUtil.openSession();
 			Transaction transaction = null;
 			try {
 				transaction = session.beginTransaction();
@@ -38,6 +41,7 @@ public class ProductDAOImpl implements ProductDAO {
 				product.setYmp(productDTO.getYmp());
 				product.setStatus("NEW");
 				product.setSsp(productDTO.getSsp());
+				product.setDimensions(productDTO.getDimensions());
 				
 				PdfManual pdfManual= new PdfManual();
 				pdfManual.setManualUrl(productDTO.getPdfUrl());
@@ -73,12 +77,13 @@ public class ProductDAOImpl implements ProductDAO {
 					transaction.commit();
 					} catch (HibernateException e) {
 						System.err.println("error" + e);
-						
+						session.close();
 						e.printStackTrace();
 					} 
 		}
 	@Override
 	public void updateProduct(ProductDTO productDTO) {
+		Session session = HibernateUtil.openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -94,6 +99,7 @@ public class ProductDAOImpl implements ProductDAO {
 			product.setYmp(productDTO.getYmp());
 			product.setStatus("NEW");
 			product.setSsp(productDTO.getSsp());
+			product.setDimensions(productDTO.getDimensions());
 			
 			PdfManual pdfManual= new PdfManual();
 			pdfManual.setManualUrl(productDTO.getPdfUrl());
@@ -129,7 +135,7 @@ public class ProductDAOImpl implements ProductDAO {
 				transaction.commit();
 				} catch (HibernateException e) {
 					System.err.println("error" + e);
-					
+					session.close();
 					e.printStackTrace();
 				} 
 		
@@ -137,13 +143,14 @@ public class ProductDAOImpl implements ProductDAO {
 	
 	
 	@Override
-	public ProductDTO getAllProducts(int code){
+	public ProductDTO getProductDetails(int code){
+		Session session = HibernateUtil.openSession();
 		String productHql="from Product where productId =:productId";
 		String imageHql="select s.simageUrl from SecondaryImages s where s.product.productId =:productId";
 		String pdfHql="select p.manualUrl from PdfManual p where p.product.productId =:productId";
 		String categoriesHql="from Categories c ,Product p where p.productId =:productId";
 		
-		final Session session = HibernateUtil.openSession();
+		
 
 		final int productId = code;
 		
@@ -155,7 +162,7 @@ public class ProductDAOImpl implements ProductDAO {
 		final Query imageQuery = session.createQuery(imageHql);
 		imageQuery.setParameter("productId", productId);
 		final List<String> imageSet = imageQuery.list();
-		 
+		
 		
 		
 		final Query pdfQuery = session.createQuery(pdfHql);
@@ -186,15 +193,87 @@ public class ProductDAOImpl implements ProductDAO {
 		productDTO.setYmp(productResult.get(0).getYmp());
 		productDTO.setPdfUrl(pdfResult.get(0));
 		productDTO.setImagesUrl(imageSet);
+		productDTO.setDimensions(productResult.get(0).getDimensions());
 		//productDTO.setCategories(categorieSet);
+		session.close();
 		return productDTO;
 
 		
 	}
 	@Override
-	public void editProducts(ProductDTO productDTO) {
-		// TODO Auto-generated method stub
+	public List<ProductDTO> getAllProduct() {
+		Session session = HibernateUtil.openSession();
+
+        String hql="from Product";
+        
+        final Query query = session.createQuery(hql);
+        
+        List<Product> productResult=query.list();
+        session.close();
+        return converter(productResult);
+        
+
+	}
+	public List<ProductDTO> converter(List<Product> productResult)
+	{
+		List<ProductDTO> productDTOList= new ArrayList<>();
+        for(Product product: productResult) {
+        ProductDTO productDTO= new ProductDTO();
+        productDTO.setProductId(product.getProductId());
+        productDTO.setComments(product.getComments());
+        productDTO.setLongDesc(product.getLongDesc());
+        productDTO.setMrp(product.getMrp());
+         productDTO.setPrimaryImage(product.getPrimaryImage());
+         productDTO.setProductName(product.getProductName());
+        productDTO.setSellerId(product.getSellerId());
+        productDTO.setShortDesc(product.getShortDesc());
+        productDTO.setSsp(product.getSsp());
+        productDTO.setStatus(product.getStatus());
+        productDTO.setYmp(product.getYmp());
+        productDTO.setDimensions(product.getDimensions());
+        productDTOList.add(productDTO);
+	}
+        return productDTOList;}
+	@Override
+	public List<ProductDTO> approveProducts(int[] productIdList) {
+		Session session = HibernateUtil.openSession();
+		String hql;
+		Query query;
+		for(int i :productIdList ) {
+		session.beginTransaction();
+		 hql="Update Product product set product.status='Approved' where product.productId = :productIdList";
+		  query = session.createQuery(hql);
+		query.setParameter("productIdList", i);
+		query.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		}
+		Session session2 = HibernateUtil.openSession();
+		session2.beginTransaction();
+		hql = "from Product product";
+		query = session2.createQuery(hql);
+		List<Product> product = query.list();
+		session2.close();
+		return converter(product);
+	}
+	@Override
+	public void rejectProducts(int[] productIdList) {
+		Session session = HibernateUtil.openSession();
+		for(int i :productIdList ) {
+		session.beginTransaction();
+		String hql="Update Product product set product.status='Rejected' where product.productId = :productIdList";
+		final Query query = session.createQuery(hql);
+		query.setParameter("productIdList", i);
+		query.executeUpdate();
+		session.getTransaction().commit();
 		
+		}
+		session.close();
+		
+	}
+	@Override
+	public List<ProductDTO> getSearchResult(String searchText, String param) {
+	return null;	
 	}
 	
 }

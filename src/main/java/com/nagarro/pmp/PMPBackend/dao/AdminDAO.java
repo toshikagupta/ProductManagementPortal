@@ -6,6 +6,7 @@ package com.nagarro.pmp.PMPBackend.dao;
 import java.util.List;
 
 import com.nagarro.pmp.PMPBackend.dto.LoginDTO;
+import com.nagarro.pmp.PMPBackend.dto.ProductDTO;
 import com.nagarro.pmp.PMPBackend.dto.SellerDTO;
 
 /**
@@ -28,5 +29,8 @@ public interface AdminDAO {
      * @return
      */
     List<SellerDTO> filterbyStatus(String status);
+	List<ProductDTO> sortProductList(String classifier);
+	List<ProductDTO> getProductSearchResult(String searchparam, String classifier);
+	
 
 }

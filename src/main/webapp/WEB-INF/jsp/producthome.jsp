@@ -210,74 +210,73 @@ a {
 <body>
 	<div class="login-wrap">
 		<div class="login-html">
-			<label for="tab-1" class="tab">Seller Details</label> <a
-				href="/productdetails" class="tab">Product Details</a>
+			<label for="tab-1" class="tab">Product Details</label>
+			<a href="/sellerdetails" class="tab">Seller Details</a>
 			<div class="login-form">
-				<form action="/approve" method="post">
-
-					<label style="color: white;">Search By:</label>
-					<div class="group" style="margin-top: 5%">
-						<input type="radio" name="searchs" value="Company Name">
-						Company Name <input type="radio" name="searchs" value="Owner Name">
-						Owner Name <input type="radio" name="searchs"
-							value="Contact Number"> Contact Number <input
-							type="radio" name="searchs" value="status"> Status
-					</div>
-					<div class="group">
-						<input id="search" type="search" class="input" data-type="text"
-							style="width: 70%; float: left" name="searchText"> <input
-							type="submit" class="button" value="Search"
-							style="width: 25%; float: right;" formaction="/searchseller">
-					</div>
-
-					<div style="margin-top: 15%;">
-						<font color="red">${errorMessage}</font>
-
-						<table class="group" id="tab1">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Seller Name</th>
-									<th>Status</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="sellerdetail" items="${seller}">
-									<tr>
-										<td><input type="checkbox" name="selectSeller"
-											value="${sellerdetail.sellerId}" id="check"></td>
-									<td>
-									<a href="sellers/${sellerdetail.sellerId}">	
-									${sellerdetail.sellerName}
-									</a>
-									</td>
-										<td>${sellerdetail.status}</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
-					<div class="dropdown" style="float: right;">
-						<button class="dropbtn">Filter By:</button>
-						<div class="dropdown-content">
-							<a href="/sellerId">Seller ID</a> <a href="/regTime">Registration
-								Time</a>
-
+				<form action="/approveproducts" method="post">
+						<label style="color: white;">Search By:</label>
+						<div class="group" style="margin-top: 5%">
+							<input type="radio" name="searchp" value="productId">
+							Product Code <input type="radio" name="searchp"
+								value="productName"> Product Name <input type="radio"
+								name="searchp" value="productId"> Product ID
 						</div>
-					</div>
+						<div class="group">
+							<input id="search" type="search" class="input" data-type="text"
+								style="width: 70%; float: left"> <input type="submit"
+								class="button" value="Search" style="width: 25%; float: right;">
+						</div>
 
-					<div class="hr"></div>
-					<div class="group">
-
-						<input type="submit" class="button" value="Approve"
-							style="float: left; width: 25%"> <input
-							style="float: right; width: 25%" type="submit" class="button"
-							value="Reject" formaction="/reject">
-
-					</div>
-
+						<div style="margin-top: 15%;">
+							<font color="red">${errorMessage}</font>
+							<table class="group" id="tab2">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Product Name</th>
+										<th>Status</th>
+										<th></th>
+										<th>Mrp</th>
+										<th></th>
+										<th>Ssp</th>
+										<th></th>
+										<th>Ymp</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="productdetail" items="${product}">
+										<tr>
+											<td><input type="checkbox" name="selectProduct"
+												value="${productdetail.productId}" id="check1"></td>
+											<td>${productdetail.productName}</td>
+											<td>${productdetail.status}</td>
+											<td></td>
+											<td>Rs:${productdetail.mrp}</td>
+											<td></td>
+											<td>Rs:${productdetail.ssp}</td>
+											<td></td>
+											<td>Rs:${productdetail.ymp}</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+						<div class="dropdown" style="float: right;">
+							<button class="dropbtn">Filter By:</button>
+							<div class="dropdown-content">
+								<a href="/mrp">MRP</a> <a href="/ssp">SSP</a> <a href="/ymp">YMP</a> <a
+									href="/date">Date</a>
+							</div>
+						</div>
+						<div class="hr"></div>
+						<div class="group">
+							<input type="submit" class="button" value="Approve"
+								style="float: left; width: 25%"> <input
+								style="float: right; width: 25%" type="submit" class="button"
+								value="Reject" formaction="/rejectproducts">
+						</div>
+					
 				</form>
-
 			</div>
 		</div>
 	</div>

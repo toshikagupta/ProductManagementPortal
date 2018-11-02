@@ -44,7 +44,18 @@ public class Product {
 	String status;
 	@Column(name = "COMMENTS")
 	String comments;
+	@Column(name="DIMENSIONS")
+	String dimensions;
 	
+	
+	public String getDimensions() {
+		return dimensions;
+	}
+
+	public void setDimensions(String dimensions) {
+		this.dimensions = dimensions;
+	}
+
 	@OneToMany(mappedBy="product", cascade= {CascadeType.ALL})
 	Set<SecondaryImages> secondaryImages=new HashSet<>();
 	

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.nagarro.pmp.PMPBackend.dao.AdminDAO;
 import com.nagarro.pmp.PMPBackend.dto.LoginDTO;
+import com.nagarro.pmp.PMPBackend.dto.ProductDTO;
 import com.nagarro.pmp.PMPBackend.dto.SellerDTO;
 import com.nagarro.pmp.PMPBackend.services.AdminService;
 @Service
@@ -50,6 +51,12 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<SellerDTO> filterStatus(String status) {
 		return adminRepo.filterbyStatus(status);
+	}
+
+
+	@Override
+	public List<ProductDTO> filterProduct(String string) {
+		return adminRepo.sortProductList(string);
 	}
 
 }

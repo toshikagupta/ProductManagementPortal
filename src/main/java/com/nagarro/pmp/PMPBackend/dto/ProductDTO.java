@@ -19,6 +19,7 @@ public class ProductDTO {
 	String primaryImage;
 	String status;
 	String comments;
+	String dimensions;
 	List<String> categories;
 	List<String> imagesUrl;
 	String pdfUrl;
@@ -108,5 +109,12 @@ public class ProductDTO {
 	public void setPdfUrl(String pdfUrl) {
 		this.pdfUrl = pdfUrl;
 	}
+	public String getDimensions() {
+		return dimensions;
+	}
+	public void setDimensions(String dimensions) {
+		this.dimensions = dimensions;
+	}
+	
 	
 }

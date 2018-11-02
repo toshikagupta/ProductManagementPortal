@@ -40,6 +40,8 @@ public class SellerLoginResource {
 			return sellerService.getAllSellers();
 			
 		}
+		
+		
 
 	
 
