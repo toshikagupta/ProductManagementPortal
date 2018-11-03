@@ -81,10 +81,10 @@ public class AdminDAOImpl implements AdminDAO {
 			transaction = session.getTransaction();
 			transaction.begin();
 			String hql = null;
-			if (classifier.equalsIgnoreCase("SellerId")) {
+			if ("SellerId".equalsIgnoreCase(classifier)) {
 				hql = "from Seller seller order by sellerId desc";
 
-			} else if (classifier.equalsIgnoreCase("Registration time")) {
+			} else if ("Registration time".equalsIgnoreCase(classifier)) {
 				hql = "from Seller seller order by time desc";
 			}
 			query = session.createQuery(hql);
@@ -120,14 +120,14 @@ public class AdminDAOImpl implements AdminDAO {
 			transaction = session.getTransaction();
 			transaction.begin();
 			String hql = null;
-			if (classifier.equalsIgnoreCase("Company Name")) {
+			if ("Company Name".equalsIgnoreCase(classifier)) {
 				hql = "from Seller seller where seller.companyName like :searchparam";
 
-			} else if (classifier.equalsIgnoreCase("Owner Name")) {
+			} else if ("Owner Name".equalsIgnoreCase(classifier)) {
 				hql = "from Seller seller where seller.sellerName like :searchparam";
 			}
 
-			else if (classifier.equalsIgnoreCase("Contact Number")) {
+			else if ("Contact Number".equalsIgnoreCase(classifier)) {
 				hql = "from Seller seller where seller.contactNumber like :searchparam";
 			}
 
@@ -176,54 +176,18 @@ public class AdminDAOImpl implements AdminDAO {
 			transaction = session.getTransaction();
 			transaction.begin();
 			String hql = null;
-			if (classifier.equalsIgnoreCase("MRP")) {
+			if ("MRP".equalsIgnoreCase(classifier)) {
 				hql = "from Product product order by mrp desc";
 
-			} else if (classifier.equalsIgnoreCase("SSP")) {
+			} else if ("SSP".equalsIgnoreCase(classifier)) {
 				hql = "from Product product order by ssp desc";
-			} else if (classifier.equalsIgnoreCase("YMP")) {
+			} else if ("YMP".equalsIgnoreCase(classifier)) {
 				hql = "from Product product order by ymp desc";
 			}
-			query = session.createQuery(hql);
-			result = query.list();
-			transaction.commit();
-
-		} catch (Exception e) {
-			transaction.rollback();
-
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return result;
-	}
-
-	@Override
-	public List<ProductDTO> getProductSearchResult(String searchparam, String classifier) {
-
-		Query query = null;
-		List<ProductDTO> result = null;
-		Transaction transaction = null;
-		Session session = HibernateUtil.openSession();
-
-		try {
-
-			transaction = session.getTransaction();
-			transaction.begin();
-			String hql = null;
-			if (classifier.equalsIgnoreCase("Product Code")) {
-				hql = "from Product product where product.productId like :searchparam";
-
-			} else if (classifier.equalsIgnoreCase("Product Name")) {
-				hql = "from Product product where product.productName like :searchparam";
+			else if("TIME".equalsIgnoreCase(classifier)) {
+				hql = "from Product product order by time desc";
 			}
-
-			else if (classifier.equalsIgnoreCase("Product Id")) {
-				hql = "from Product product where product.productId like :searchparam";
-			}
-
 			query = session.createQuery(hql);
-			query.setParameter("searchparam", searchparam + "%");
 			result = query.list();
 			transaction.commit();
 

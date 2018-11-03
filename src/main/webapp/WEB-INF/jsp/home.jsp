@@ -1,4 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <html>
 <head>
 <style>
@@ -34,7 +37,7 @@ a {
 	margin: auto;
 	position: relative;
 	background:
-		url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg)
+		url(https:// raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg)
 		no-repeat center;
 	box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0
 		rgba(0, 0, 0, .19);
@@ -201,10 +204,17 @@ a {
 	display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
+/*
+ * Change the background color of the dropdown button when the dropdown content
+ * is shown
+ */
 .dropdown:hover .dropbtn {
 	background-color: #4286f4;
 }
+td a:hover{ 
+	text-decoration: underline;
+	color: #cccccc;
+	}
 </style>
 </head>
 <body>
@@ -212,6 +222,8 @@ a {
 		<div class="login-html">
 			<label for="tab-1" class="tab">Seller Details</label> <a
 				href="/productdetails" class="tab">Product Details</a>
+				
+				<a href="/displayCategory" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">View Category</a>
 			<div class="login-form">
 				<form action="/approve" method="post">
 
@@ -258,7 +270,7 @@ a {
 						</table>
 					</div>
 					<div class="dropdown" style="float: right;">
-						<button class="dropbtn">Filter By:</button>
+						<button class="dropbtn" disabled>Filter By:</button>
 						<div class="dropdown-content">
 							<a href="/sellerId">Seller ID</a> <a href="/regTime">Registration
 								Time</a>
@@ -281,5 +293,30 @@ a {
 			</div>
 		</div>
 	</div>
+	
+    <c:if test="${currentPage != 1}">
+        <td><a href="/viewpage?page=${currentPage - 1}">Previous</a></td>
+    </c:if>
+ 
+    
+    <table border="1" cellpadding="5" cellspacing="5">
+        <tr>
+            <c:forEach begin="1" end="${noOfPages}" var="i">
+                <c:choose>
+                    <c:when test="${currentPage eq i}">
+                        <td>${i}</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><a href="/viewpage?page=${i}">${i}</a></td>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </tr>
+    </table>
+     
+    
+    <c:if test="${currentPage lt noOfPages}">
+        <td><a href="/viewpage?page=${currentPage + 1}">Next</a></td>
+    </c:if>
 </body>
 </html>

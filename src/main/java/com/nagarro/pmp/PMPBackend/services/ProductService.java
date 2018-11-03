@@ -2,8 +2,8 @@ package com.nagarro.pmp.PMPBackend.services;
 
 import java.util.List;
 
+import com.nagarro.pmp.PMPBackend.dto.CategoryDTO;
 import com.nagarro.pmp.PMPBackend.dto.ProductDTO;
-import com.nagarro.pmp.PMPBackend.dto.ProductDescDTO;
 
 public interface ProductService {
 
@@ -17,6 +17,16 @@ void rejectProducts(int[] productId);
 ProductDTO getProductDetails(int id);
 
 List<ProductDTO> getSearchResult(String searchText, String param);
+
+List<ProductDTO> filterProducts(String searchText, String fparam);
+
+ProductDTO displayProductById(int id);
+
+int getTotalProductCount();
+
+List<ProductDTO> getProductWithOffset(int i, int recordsPerPage);
+
+	List<CategoryDTO> displayCategories();
 
 	
 

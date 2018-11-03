@@ -18,7 +18,7 @@ import com.nagarro.pmp.PMPBackend.services.ProductService;
 import com.nagarro.pmp.PMPBackend.services.SellerService;
 
 @Controller
-@SessionAttributes("id")
+//@SessionAttributes("id")
 public class AdminLoginController {
 	
 	@Autowired

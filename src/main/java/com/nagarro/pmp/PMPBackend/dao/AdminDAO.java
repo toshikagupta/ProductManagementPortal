@@ -30,7 +30,6 @@ public interface AdminDAO {
      */
     List<SellerDTO> filterbyStatus(String status);
 	List<ProductDTO> sortProductList(String classifier);
-	List<ProductDTO> getProductSearchResult(String searchparam, String classifier);
 	
 
 }

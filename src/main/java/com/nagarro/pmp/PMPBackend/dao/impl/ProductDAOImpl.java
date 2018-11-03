@@ -12,8 +12,10 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import com.nagarro.pmp.PMPBackend.dao.ProductDAO;
+import com.nagarro.pmp.PMPBackend.dto.CategoryDTO;
 import com.nagarro.pmp.PMPBackend.dto.ProductDTO;
 import com.nagarro.pmp.PMPBackend.dto.ProductDescDTO;
+import com.nagarro.pmp.PMPBackend.dto.SellerDTO;
 import com.nagarro.pmp.PMPBackend.hibernate.util.HibernateUtil;
 import com.nagarro.pmp.PMPBackend.model.Categories;
 import com.nagarro.pmp.PMPBackend.model.PdfManual;
@@ -169,14 +171,15 @@ public class ProductDAOImpl implements ProductDAO {
 		pdfQuery.setParameter("productId", productId);
 		final List<String> pdfResult = pdfQuery.list();
 		
-//		final Query categoriesQuery = session.createQuery(categoriesHql);
-//		categoriesQuery.setParameter("productId", productId);
-//		final List<Categories> categoriesResult = categoriesQuery.list();
-//		List<String> categoriesSet= new ArrayList<>(); 
-//		for(Categories ci:  categoriesResult) {
-//			categoriesSet.add(ci.getCategory());
-//		}
+	final Query categoriesQuery = session.createQuery(categoriesHql);
+		categoriesQuery.setParameter("productId", productId);
+		final List<Categories> categoriesResult = categoriesQuery.list();
+		List<String> categoriesSet= new ArrayList<>(); 
 		
+		/*for(Categories ci:  categoriesResult) {
+			categoriesSet.add(ci.getCategory());
+		}
+		*/
 		
 		
 		ProductDTO productDTO= new ProductDTO();
@@ -194,7 +197,7 @@ public class ProductDAOImpl implements ProductDAO {
 		productDTO.setPdfUrl(pdfResult.get(0));
 		productDTO.setImagesUrl(imageSet);
 		productDTO.setDimensions(productResult.get(0).getDimensions());
-		//productDTO.setCategories(categorieSet);
+		productDTO.setCategories(categoriesSet);
 		session.close();
 		return productDTO;
 
@@ -272,8 +275,124 @@ public class ProductDAOImpl implements ProductDAO {
 		
 	}
 	@Override
-	public List<ProductDTO> getSearchResult(String searchText, String param) {
-	return null;	
+	public List<ProductDTO> getSearchResult(String searchparam, String classifier) {
+Session session = HibernateUtil.openSession();
+		 Query query=null;
+	       Transaction transaction=null;
+	       List<Product> product = null;
+	        try {
+	            transaction = session.getTransaction();
+	            transaction.begin();
+	            String hql=null;
+	            if("productCode".equalsIgnoreCase(classifier))
+	            { 
+	                hql="from Product product where product.productId = :searchparam";
+	                
+	            
+	            }
+	            else if("productName".equalsIgnoreCase(classifier))
+	            {
+	                hql="from Product product where product.productName like :searchparam";
+	            }
+	        
+	        else if("productId".equalsIgnoreCase(classifier))
+	        {
+	            hql="from Product product where product.productId = :searchparam";
+	        }
+	            
+	             query = session.createQuery(hql);
+	             if("productName".equalsIgnoreCase(classifier)) {
+	             query.setParameter("searchparam", searchparam);
+	             }
+	             else {
+	            	 int searchparams = Integer.parseInt(searchparam);
+	            	 query.setParameter("searchparam", searchparams);
+	             }
+	              product = query.list();
+	            transaction.commit();
+	                
+	        } catch (Exception e) {
+	            transaction.rollback();
+	            
+	            e.printStackTrace();
+	        } finally {
+	            session.close();
+	        }
+	        return converter(product);
+	}
+	@Override
+	public List<ProductDTO> filterProducts(String searchText, String fparam) {
+		List<Product> product;
+		Session session = HibernateUtil.openSession();
+		String hql = null;
+		if("status".equalsIgnoreCase(fparam)) {
+		hql = "from Product product where status=:searchText";
+		}
+		else if("sellerId".equalsIgnoreCase(fparam)) {
+			hql = "from Product product where sellerId=:searchText";
+		}
+		else if("companyName".equalsIgnoreCase(fparam)) {
+			hql = "from Product product where sellerId = (select sellerId from Seller seller where companyName = :searchText)";
+		}
+//		else if("category".equalsIgnoreCase(fparam)) {
+//			
+//		}
+		Query query = session.createQuery(hql);
+		if("sellerId".equalsIgnoreCase(fparam)) {
+			int intSearchText = Integer.parseInt(searchText);
+			query.setParameter("searchText", intSearchText);
+		}
+		else {
+		query.setParameter("searchText", searchText);
+		}
+		product = query.list();
+		session.close();
+		return converter(product);
+	}
+	@Override
+	public int getProductCount() {
+		Session session = HibernateUtil.openSession();
+		String countQ = "Select count (product.productId) from Product product";
+		Query countQuery = session.createQuery(countQ);
+		Long countResults = (Long)countQuery.uniqueResult();
+		session.close();
+		return countResults.intValue();
+		
+	}
+	@Override
+	public List<ProductDTO> getProductWithOffset(int i, int recordsPerPage) {
+		Session session = HibernateUtil.openSession();
+		final String hql="from Product product";
+		final Query query=session.createQuery(hql);
+		//query.setFirstResult(0);
+		//query.setMaxResults(1);
+		query.setFirstResult(i);
+		query.setMaxResults(recordsPerPage);
+		List<Product> listOfProducts=query.list();
+		session.close();
+		return converter(listOfProducts);
+		
+	}
+	@Override
+	public List<CategoryDTO> displayCategories() {
+		Session session = HibernateUtil.openSession();
+		final String hql="from Categories";
+		final Query query=session.createQuery(hql);
+		List<Categories> listOfCategories=query.list();
+		session.close();
+		return categoryConverter(listOfCategories);
+	}
+	public List<CategoryDTO> categoryConverter(List<Categories> listOfCategories)
+	{
+		List<CategoryDTO> categoryDTOList=new ArrayList<>();
+		for(Categories c:listOfCategories)
+		{
+			CategoryDTO categoryDTO=new CategoryDTO();
+			categoryDTO.setCategory(c.getCategory());
+			categoryDTO.setCategoryId(c.getCategoryId());
+			categoryDTOList.add(categoryDTO);
+		}
+		return categoryDTOList;
 	}
 	
 }

@@ -1,4 +1,5 @@
 package com.nagarro.pmp.PMPBackend.model;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,7 +47,8 @@ public class Product {
 	String comments;
 	@Column(name="DIMENSIONS")
 	String dimensions;
-	
+	@Column(name="REGISTRATION_TIME")
+	Timestamp time;
 	
 	public String getDimensions() {
 		return dimensions;

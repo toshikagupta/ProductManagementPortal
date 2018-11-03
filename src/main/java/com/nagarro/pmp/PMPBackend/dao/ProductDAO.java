@@ -2,6 +2,7 @@ package com.nagarro.pmp.PMPBackend.dao;
 
 import java.util.List;
 
+import com.nagarro.pmp.PMPBackend.dto.CategoryDTO;
 import com.nagarro.pmp.PMPBackend.dto.ProductDTO;
 import com.nagarro.pmp.PMPBackend.dto.ProductDescDTO;
 
@@ -20,5 +21,13 @@ public interface ProductDAO {
 	void rejectProducts(int[] productId);
 
 	List<ProductDTO> getSearchResult(String searchText, String param);
+
+	List<ProductDTO> filterProducts(String searchText, String fparam);
+
+	int getProductCount();
+
+	List<ProductDTO> getProductWithOffset(int i, int recordsPerPage);
+
+	List<CategoryDTO> displayCategories();
 
 }

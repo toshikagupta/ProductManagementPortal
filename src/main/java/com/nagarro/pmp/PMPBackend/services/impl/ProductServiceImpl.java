@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nagarro.pmp.PMPBackend.dao.ProductDAO;
+import com.nagarro.pmp.PMPBackend.dto.CategoryDTO;
 import com.nagarro.pmp.PMPBackend.dto.ProductDTO;
 import com.nagarro.pmp.PMPBackend.dto.ProductDescDTO;
 import com.nagarro.pmp.PMPBackend.services.ProductService;
@@ -46,6 +47,31 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDTO> getSearchResult(String searchText, String param) {
 		return productDAO.getSearchResult(searchText,param);
+	}
+
+	@Override
+	public List<ProductDTO> filterProducts(String searchText, String fparam) {
+		return productDAO.filterProducts(searchText,fparam);
+	}
+
+	@Override
+	public ProductDTO displayProductById(int id) {
+		return productDAO.getProductDetails(id);
+	}
+
+	@Override
+	public int getTotalProductCount() {
+		return productDAO.getProductCount();
+	}
+
+	@Override
+	public List<ProductDTO> getProductWithOffset(int i, int recordsPerPage) {
+		return productDAO.getProductWithOffset(i,recordsPerPage);
+	}
+
+	@Override
+	public List<CategoryDTO> displayCategories() {
+		return productDAO.displayCategories();
 	}
    
 	

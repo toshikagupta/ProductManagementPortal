@@ -1,5 +1,6 @@
 package com.nagarro.pmp.PMPBackend.dto;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import com.nagarro.pmp.PMPBackend.model.Categories;
@@ -23,7 +24,7 @@ public class ProductDTO {
 	List<String> categories;
 	List<String> imagesUrl;
 	String pdfUrl;
-	
+	Timestamp time;
 
 	public int getProductId() {
 		return productId;

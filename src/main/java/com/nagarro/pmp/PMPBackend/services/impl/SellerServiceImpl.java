@@ -61,7 +61,20 @@ public class SellerServiceImpl implements SellerService {
 
 
 	@Override
-	public SellerDTO displaysSellerById(int sellerId) {
+	public SellerDTO displaySellerById(int sellerId) {
 		return sellerRegistrationDAO.displaysSellerById(sellerId);
+	}
+
+
+	@Override
+	public int getTotalSellerCount() {
+		return sellerRegistrationDAO.getTotalSellerCount();
+	}
+
+
+	@Override
+	public List<SellerDTO> getSellerWithOffset(int i, int recordsPerPage) {
+		
+		return sellerRegistrationDAO.getSellerWithOffset(i,recordsPerPage);
 	}
 }

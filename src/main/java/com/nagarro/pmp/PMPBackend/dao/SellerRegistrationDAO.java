@@ -24,5 +24,9 @@ public interface SellerRegistrationDAO {
 
 	SellerDTO displaysSellerById(int sellerId);
 
+	int getTotalSellerCount();
+
+	List<SellerDTO> getSellerWithOffset(int i, int recordsPerPage);
+
 
 }

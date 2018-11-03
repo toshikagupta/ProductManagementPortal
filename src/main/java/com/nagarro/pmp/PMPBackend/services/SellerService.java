@@ -22,6 +22,10 @@ public interface SellerService {
 
 	void rejectSellers(int[] sellerId);
 
-	SellerDTO displaysSellerById(int sellerId);
+	SellerDTO displaySellerById(int sellerId);
+
+	int getTotalSellerCount();
+
+	List<SellerDTO> getSellerWithOffset(int i, int recordsPerPage);
 
 }

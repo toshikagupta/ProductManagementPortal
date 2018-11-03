@@ -34,7 +34,7 @@ a {
 	margin: auto;
 	position: relative;
 	background:
-		url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg)
+		url(https:// raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg)
 		no-repeat center;
 	box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0
 		rgba(0, 0, 0, .19);
@@ -201,10 +201,17 @@ a {
 	display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
+/*
+ * Change the background color of the dropdown button when the dropdown content
+ * is shown
+ */
 .dropdown:hover .dropbtn {
 	background-color: #4286f4;
 }
+td a:hover{ 
+	text-decoration: underline;
+	color: #cccccc;
+	}
 </style>
 </head>
 <body>
@@ -216,15 +223,20 @@ a {
 				<form action="/approveproducts" method="post">
 						<label style="color: white;">Search By:</label>
 						<div class="group" style="margin-top: 5%">
-							<input type="radio" name="searchp" value="productId">
+							<input type="radio" name="searchp" value="productCode">
 							Product Code <input type="radio" name="searchp"
 								value="productName"> Product Name <input type="radio"
 								name="searchp" value="productId"> Product ID
+								<input type="radio"
+									name="searchpf" value="status"> Status <input type="radio"
+										name="searchpf" value="sellerId"> Seller Id <input type="radio"
+											name="searchpf" value="companyName"> Company Name <input type="radio"
+												name="searchpf" value="category"> Category
 						</div>
 						<div class="group">
 							<input id="search" type="search" class="input" data-type="text"
-								style="width: 70%; float: left"> <input type="submit"
-								class="button" value="Search" style="width: 25%; float: right;">
+								style="width: 70%; float: left" name="searchText"> <input type="submit"
+								class="button" value="Search" style="width: 25%; float: right;" formaction="/searchproduct">
 						</div>
 
 						<div style="margin-top: 15%;">
@@ -235,12 +247,6 @@ a {
 										<th></th>
 										<th>Product Name</th>
 										<th>Status</th>
-										<th></th>
-										<th>Mrp</th>
-										<th></th>
-										<th>Ssp</th>
-										<th></th>
-										<th>Ymp</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -248,24 +254,18 @@ a {
 										<tr>
 											<td><input type="checkbox" name="selectProduct"
 												value="${productdetail.productId}" id="check1"></td>
-											<td>${productdetail.productName}</td>
+											<td><a href="products/${productdetail.productId}">${productdetail.productName}</td>
 											<td>${productdetail.status}</td>
-											<td></td>
-											<td>Rs:${productdetail.mrp}</td>
-											<td></td>
-											<td>Rs:${productdetail.ssp}</td>
-											<td></td>
-											<td>Rs:${productdetail.ymp}</td>
 										</tr>
 									</c:forEach>
 								</tbody>
 							</table>
 						</div>
 						<div class="dropdown" style="float: right;">
-							<button class="dropbtn">Filter By:</button>
+							<button class="dropbtn" disabled>Filter By:</button>
 							<div class="dropdown-content">
 								<a href="/mrp">MRP</a> <a href="/ssp">SSP</a> <a href="/ymp">YMP</a> <a
-									href="/date">Date</a>
+									href="/time">Registration Time</a>
 							</div>
 						</div>
 						<div class="hr"></div>
@@ -280,5 +280,30 @@ a {
 			</div>
 		</div>
 	</div>
+	
+	 <c:if test="${currentPage != 1}">
+        <td><a href="/viewproductpage?page=${currentPage - 1}">Previous</a></td>
+    </c:if>
+ 
+    
+    <table border="1" cellpadding="5" cellspacing="5">
+        <tr>
+            <c:forEach begin="1" end="${noOfPages}" var="i">
+                <c:choose>
+                    <c:when test="${currentPage eq i}">
+                        <td>${i}</td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><a href="/viewproductpage?page=${i}">${i}</a></td>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </tr>
+    </table>
+     
+    
+    <c:if test="${currentPage lt noOfPages}">
+        <td><a href="/viewproductpage?page=${currentPage + 1}">Next</a></td>
+    </c:if>
 </body>
 </html>

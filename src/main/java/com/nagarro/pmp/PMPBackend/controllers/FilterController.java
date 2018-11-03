@@ -38,21 +38,28 @@ public class FilterController {
 	@RequestMapping(value="/mrp" , method=RequestMethod.GET)
 	public String filterProductsByMrp(ModelMap model)
 	{
-		productList=adminService.filterProduct("Mrp");
+		productList=adminService.filterProduct("MRP");
 		model.addAttribute("product", productList);
 		return "producthome";
 	}
 	@RequestMapping(value="/ssp" , method=RequestMethod.GET)
 	public String filterProductsBySsp(ModelMap model)
 	{
-		productList=adminService.filterProduct("Ssp");
+		productList=adminService.filterProduct("SSP");
 		model.addAttribute("product", productList);
 		return "producthome";
 	}
 	@RequestMapping(value="/ymp" , method=RequestMethod.GET)
 	public String filterProductsByYmp(ModelMap model)
 	{
-		productList=adminService.filterProduct("Ymp");
+		productList=adminService.filterProduct("YMP");
+		model.addAttribute("product", productList);
+		return "producthome";
+	}
+	@RequestMapping(value="/time" , method=RequestMethod.GET)
+	public String filterProductsByTime(ModelMap model)
+	{
+		productList=adminService.filterProduct("TIME");
 		model.addAttribute("product", productList);
 		return "producthome";
 	}

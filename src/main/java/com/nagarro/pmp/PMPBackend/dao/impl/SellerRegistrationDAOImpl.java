@@ -77,7 +77,14 @@ public class SellerRegistrationDAOImpl implements SellerRegistrationDAO {
 		Session session = HibernateUtil.openSession();
 		final String hql="from Seller seller order by seller.status";
 		final Query query=session.createQuery(hql);
+		query.setFirstResult(0);
+		query.setMaxResults(1);
 		List<Seller> listOfSellers=query.list();
+		
+		
+		
+		
+		
 		return converter(listOfSellers);
 	}
 
@@ -152,6 +159,35 @@ public class SellerRegistrationDAOImpl implements SellerRegistrationDAO {
 		
 		session2.close();
 		return converter(seller).get(0);
+	}
+
+	@Override
+	public int getTotalSellerCount() {
+		Session session = HibernateUtil.openSession();
+		String countQ = "Select count (seller.sellerId) from Seller seller";
+		Query countQuery = session.createQuery(countQ);
+		Long countResults = (Long) countQuery.uniqueResult();
+		session.close();
+		return countResults.intValue();
+	}
+
+	@Override
+	public List<SellerDTO> getSellerWithOffset(int i, int recordsPerPage) {
+		Session session = HibernateUtil.openSession();
+		final String hql="from Seller seller order by seller.status";
+		final Query query=session.createQuery(hql);
+		//query.setFirstResult(0);
+		//query.setMaxResults(1);
+		query.setFirstResult(i);
+		query.setMaxResults(recordsPerPage);
+		List<Seller> listOfSellers=query.list();
+		
+		
+		
+		
+		
+		return converter(listOfSellers);
+		
 	}
 
 }
